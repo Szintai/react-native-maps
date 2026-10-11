@@ -22,6 +22,7 @@
 #import "AIRMapOverlay.h"
 #import "AIRMapHeatmap.h"
 #import "AIRMapSnapshot.h"
+#import "AIRMapPulseRing.h"
 
 const NSTimeInterval AIRMapRegionChangeObserveInterval = 0.1;
 const CGFloat AIRMapZoomBoundBuffer = 0.01;
@@ -119,6 +120,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
 -(void)addSubview:(UIView *)view {
     if([view isKindOfClass:[AIRMapMarker class]]) {
         [self addAnnotation:(id <MKAnnotation>)view];
+    } else if([view isKindOfClass:[AIRMapPulseRing class]]) {
+        [self addAnnotation:(id <MKAnnotation>)view];
     } else {
         [super addSubview:view];
     }
@@ -130,6 +133,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     // Our desired API is to pass up markers/overlays as children to the mapview component.
     // This is where we intercept them and do the appropriate underlying mapview action.
     if ([subview isKindOfClass:[AIRMapMarker class]]) {
+        [self addAnnotation:(id <MKAnnotation>) subview];
+    } else if ([subview isKindOfClass:[AIRMapPulseRing class]]) {
         [self addAnnotation:(id <MKAnnotation>) subview];
     } else if ([subview isKindOfClass:[AIRMapPolyline class]]) {
         ((AIRMapPolyline *)subview).map = self;
@@ -174,6 +179,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     // similarly, when the children are being removed we have to do the appropriate
     // underlying mapview action here.
     if ([subview isKindOfClass:[AIRMapMarker class]]) {
+        [self removeAnnotation:(id<MKAnnotation>)subview];
+    } else if ([subview isKindOfClass:[AIRMapPulseRing class]]) {
         [self removeAnnotation:(id<MKAnnotation>)subview];
     } else if ([subview isKindOfClass:[AIRMapPolyline class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
