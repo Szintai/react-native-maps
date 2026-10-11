@@ -26,6 +26,7 @@
 #import "AIRMapWMSTile.h"
 #import "AIRMapLocalTile.h"
 #import "AIRMapSnapshot.h"
+#import "AIRMapPulseRing.h"
 #import "RCTConvert+AirMap.h"
 #import "AIRMapOverlay.h"
 #import <MapKit/MapKit.h>
@@ -797,6 +798,11 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
 
 - (MKAnnotationView *)mapView:(__unused AIRMap *)mapView viewForAnnotation:(AIRMapMarker *)marker
 {
+    if ([marker isKindOfClass:[AIRMapPulseRing class]]) {
+        AIRMapPulseRing *ring = (AIRMapPulseRing *)marker;
+        ring.map = mapView;
+        return [ring getAnnotationView];
+    }
     if (![marker isKindOfClass:[AIRMapMarker class]]) {
         if ([marker isKindOfClass:[MKUserLocation class]] && mapView.userLocationAnnotationTitle != nil) {
             [(MKUserLocation*)marker setTitle: mapView.userLocationAnnotationTitle];
