@@ -95,4 +95,25 @@ RCT_EXPORT_METHOD(redrawCallout:(nonnull NSNumber *)reactTag)
     }];
 }
 
+RCT_EXPORT_METHOD(animateMarkerToCoordinate:(nonnull NSNumber *)reactTag
+                  coordinate:(CLLocationCoordinate2D)coordinate
+                  duration:(nonnull NSNumber *)duration)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        if (![view isKindOfClass:[AIRMapMarker class]]) {
+            RCTLogError(@"Invalid view returned from registry, expecting AIRMapMarker, got: %@", view);
+            return;
+        }
+        AIRMapMarker *marker = (AIRMapMarker *)view;
+        [UIView animateWithDuration:duration.doubleValue / 1000.0
+                              delay:0
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^{
+            marker.coordinate = coordinate;
+        }
+                         completion:nil];
+    }];
+}
+
 @end
