@@ -28,6 +28,7 @@
 #import "AIRMapSnapshot.h"
 #import "RCTConvert+AirMap.h"
 #import "AIRMapOverlay.h"
+#import "AIRMapHeatmap.h"
 #import <MapKit/MapKit.h>
 
 static NSString *const RCTMapViewKey = @"MapView";
@@ -755,6 +756,8 @@ RCT_EXPORT_METHOD(getAddressFromCoordinates:(nonnull NSNumber *)reactTag
         return ((AIRMapLocalTile *)overlay).renderer;
     } else if ([overlay isKindOfClass:[AIRMapOverlay class]]) {
         return ((AIRMapOverlay *)overlay).renderer;
+    } else if ([overlay isKindOfClass:[AIRMapHeatmap class]]) {
+        return ((AIRMapHeatmap *)overlay).renderer;
     } else if([overlay isKindOfClass:[MKTileOverlay class]]) {
         return [[MKTileOverlayRenderer alloc] initWithTileOverlay:overlay];
     } else {
