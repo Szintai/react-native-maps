@@ -20,6 +20,7 @@
 #import "AIRMapWMSTile.h"
 #import "AIRMapLocalTile.h"
 #import "AIRMapOverlay.h"
+#import "AIRMapHeatmap.h"
 #import "AIRMapSnapshot.h"
 
 const NSTimeInterval AIRMapRegionChangeObserveInterval = 0.1;
@@ -151,6 +152,9 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else if ([subview isKindOfClass:[AIRMapOverlay class]]) {
         ((AIRMapOverlay *)subview).map = self;
         [self addOverlay:(id<MKOverlay>)subview];
+    } else if ([subview isKindOfClass:[AIRMapHeatmap class]]) {
+        ((AIRMapHeatmap *)subview).map = self;
+        [self addOverlay:(id<MKOverlay>)subview];
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
         for (int i = 0; i < childSubviews.count; i++) {
@@ -184,6 +188,8 @@ const NSInteger AIRMapMaxZoomLevel = 20;
     } else if ([subview isKindOfClass:[AIRMapLocalTile class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
     } else if ([subview isKindOfClass:[AIRMapOverlay class]]) {
+        [self removeOverlay:(id <MKOverlay>) subview];
+    } else if ([subview isKindOfClass:[AIRMapHeatmap class]]) {
         [self removeOverlay:(id <MKOverlay>) subview];
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
